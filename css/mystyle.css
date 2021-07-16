@@ -1,0 +1,54 @@
+.formstyle {
+    margin-left: 40px;
+    margin-right: -60px;
+}
+ .leftstyle {
+    margin-left: 320px;
+    
+}
+.styleh5 {
+   margin-left: 150px;
+    color:midnightblue;
+}
+label {
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    width: 100px;
+}
+.labelmiddle * {
+    vertical-align: top;
+}
+input[type=text], input[type=date], textarea, select {
+    margin-left: 25px;
+}
+input[type=text], input[type=date], select {
+    height: 25px;
+    width: 160px;
+    display: inline-block;
+    font-size: 14px;
+}
+.required {
+    color: red;
+    font-size: 14px;
+}
+.card {
+    width: 770px;
+    margin-left: 180px;
+    background-color: #EFEFEF;
+}
+#div1, #div2, #div3 {
+    font-size: 14px;
+    height: 10px;
+}
+th {
+    font-size: 14px;
+}
+td {
+    font-size: 12px;
+}
+.modal-body{
+    font-size: 14px;
+}
+
+
