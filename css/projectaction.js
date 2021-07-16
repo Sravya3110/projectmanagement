@@ -17,7 +17,8 @@ $(document).ready(function(){
           '<div class="row"><label style="margin-left:15px;">EndDate</label><div class="col-sm-5"><input type="date" name="uedate1" id="uedate" class="form-control" value='+p_edate+'></div></div>');
         $('#modal-showAlert .modal-footer .yes').hide();
         $('#modal-showAlert .modal-footer .update').show();
-        $('#modal-showAlert .modal-footer .update').click(function(){
+        $("#update1").attr('newproject_id', project_id);
+        /*$('#modal-showAlert .modal-footer .update').click(function(){
               console.log($('#upname').val());
               var u_pname = $('#upname').val();
               var u_desc = $('#udesc').val();
@@ -34,14 +35,41 @@ $(document).ready(function(){
                         pid : project_id
                 },
                 success: function(data){
-                    row.find("td:nth-child(1)").text(u_pname);
-                    row.find("td:nth-child(2)").text(u_desc);
-                    row.find("td:nth-child(3)").text(u_sdate);
-                    row.find("td:nth-child(4)").text(u_edate);
+                    row.find("td:nth-child(2)").text(u_pname);
+                    row.find("td:nth-child(3)").text(u_desc);
+                    row.find("td:nth-child(4)").text(u_sdate);
+                    row.find("td:nth-child(5)").text(u_edate);
                 }
             })
-        });
+        });*/
 
+    });
+    $('#update1').click(function(){
+
+       console.log($('#upname').val());
+       var u_pname = $('#upname').val();
+              var u_desc = $('#udesc').val();
+              var u_sdate = $('#usdate').val();
+              var u_edate = $('#uedate').val();
+              var project_id = $(this).attr('newproject_id');
+            $.ajax({
+                url: 'controller/projectmgnt.cfc?method=updateproject',
+                type: 'get',
+                data: {
+                        pname : u_pname,
+                        des : u_desc,
+                        sdate : u_sdate,
+                        edate : u_edate,
+                        pid : project_id
+                },
+                success: function(data){
+                    //row.find("td:nth-child(2)").text(u_pname);
+                    $('table').find('tr#'+project_id).find('td:eq(1)').text(u_pname);
+                    $('table').find('tr#'+project_id).find('td:eq(2)').text(u_desc);
+                    $('table').find('tr#'+project_id).find('td:eq(3)').text(u_sdate);
+                    $('table').find('tr#'+project_id).find('td:eq(4)').text(u_edate);
+                }
+            })
     });
     $(document).on("click", ".deletepjt", function(){
         var parentrow = $(this).closest("tr");

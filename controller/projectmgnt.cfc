@@ -9,7 +9,6 @@
             FROM project.dbo.project
             WHERE name = <cfqueryparam value="#arguments.pname#" cfsqltype="varchar">
         </cfquery>
-        <cfdump var="#local.chkpjt#">
         <cfif local.chkpjt.recordcount GT 0>
             <cfreturn false>
         <cfelse>
@@ -147,8 +146,17 @@
         <cfquery name="updatepjtemp" datasource="projectmanagement">
             UPDATE project.dbo.projectemployee
             SET projectId = <cfqueryparam value=#arguments.pid# cfsqltype="integer">,
-            employeeId = <cfqueryparam value=#arguments.peid# cfsqltype="integer">
-            WHERE peid = <cfqueryparam value=#arguments.eid# cfsqltype="integer">
+            employeeId = <cfqueryparam value=#arguments.eid# cfsqltype="integer">
+            WHERE peid = <cfqueryparam value=#arguments.peid# cfsqltype="integer">
+        </cfquery>
+        <cfreturn true>
+    </cffunction>
+    <cffunction name="activateproject" access="remote">
+        <cfargument name="actid" required="true">
+        <cfquery name="actpjt" datasource="projectmanagement">
+            UPDATE project.dbo.project 
+            SET status = 'A'
+            WHERE pid = <cfqueryparam value="#arguments.actid#" cfsqltype="integer">
         </cfquery>
     </cffunction>
 </cfcomponent>

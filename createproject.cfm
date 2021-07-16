@@ -12,7 +12,6 @@
     <body>
         <cfinclude template="includes/modalpopup.cfm">
         <cfif isdefined("form.submit")>
-        <cfdump var="#form#">
             <cfset instpjt = createobject("component","controller.projectmgnt").insertproject(pname = '#form.pname1#',pdesc='#form.desc1#',psdate='#form.sdate1#',pedate='#form.edate1#')>
             <cfif #instpjt# eq true>
                 <cflocation url="projectList.cfm" addtoken="no">

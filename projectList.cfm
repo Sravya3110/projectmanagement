@@ -87,15 +87,20 @@
                 </thead>
                 <tbody>
                 <cfoutput query="getpjt">
-                <tr>
+                <tr id="#pid#">
                     <!---<td>#project_Id#</td>--->
                     <td>&nbsp;</td>
-                    <td>#name#</td>
+                    <td style="text-transform: capitalize;">#name#</td>
                     <td>#description#</td>
                     <td>#startdate#</td>
                     <td>#enddate#</td>
-                    <td><button type="button" class="btn btn-danger btn-sm deletepjt" id="#pid#"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    <button type="button" class="btn btn-primary btn-sm editpjt" id="#pid#"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+                    <td><cfif isdefined('url.asnid') and #asnid# EQ 2>
+                            <button type="button" class="btn btn-warning btn-sm activatepjt" id="#pid#"><i class="fa fa-unlock-alt" style="color:white;" aria-hidden="true"></i></button>
+                        <cfelse>
+                             <button type="button" class="btn btn-primary btn-sm editpjt" id="#pid#"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-danger btn-sm deletepjt" id="#pid#"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        </cfif>
+                    </td>
                 </tr>
                 </cfoutput>
                 </tbody>
@@ -115,9 +120,31 @@
                $(".selectasn option[value="+selval+"]").attr('selected',true);
            });
             $(document).on("change", ".selectasn", function(){
-          var chgid = $(this).val();
-          console.log(chgid);
-          location.href = 'projectList.cfm?asnid=' + chgid ;
+                var chgid = $(this).val();
+                console.log(chgid);
+                location.href = 'projectList.cfm?asnid=' + chgid ;
+            });
+            $(document).on("click", ".activatepjt",function(){
+               console.log($(this).attr('id'));
+               var newid = $(this).attr('id');
+               $('#modal-showAlert').modal('show');
+               $('#headerText').html('Close Project');
+               $('#modal-showAlert .modal-body').html('Are you sure you want to activate this project?');
+               $('#modal-showAlert .modal-footer .update').hide();
+               $('#modal-showAlert .modal-footer .yes').show();
+               $('#modal-showAlert .modal-footer .yes').click(function(){
+               $.ajax({
+                url: 'controller/projectmgnt.cfc?method=activateproject',
+                type: 'get',
+                data: {
+                     actid : newid    
+                },
+                success: function(data){
+                    location.href = 'projectList.cfm';
+                }
+               });
+               });
+    
             });
         </script>
     </body>

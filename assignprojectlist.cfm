@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>List of Projects</title>
+        <title>List of Assigned Projects</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/mystyle.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -90,13 +90,14 @@
                 </thead>
                 <tbody>
                 <cfoutput query="getpjtemp">
-                <tr>
+                <tr id="#getpjtemp.peid#">
                     <!---<td>#project_Id#</td>--->
-                    <td id="td1">&nbsp;</td>
-                    <td id="td2">#name#</td>
-                    <td id="td3">#firstname#</td>
-                    <td id="td4"><button type="button" class="btn btn-danger btn-sm deleteasnpjt" id="#peid#"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    <button type="button" class="btn btn-primary btn-sm editasnpjt" id="#peid#" projectID =#projectID# employeeID= #employeeId#><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+                    <td>&nbsp;</td>
+                    <td style="text-transform: capitalize;">#getpjtemp.name#</td>
+                    <td style="text-transform: capitalize;">#getpjtemp.firstname#</td>
+                    <td><button type="button" class="btn btn-danger btn-sm deleteasnpjt" id="#getpjtemp.peid#"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-primary btn-sm editasnpjt" id="#getpjtemp.peid#" projectID ="#getpjtemp.projectID#" employeeID= "#getpjtemp.employeeId#"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                    </td>
                 </tr>
                 </cfoutput>
                 </tbody>
@@ -106,53 +107,66 @@
         </div>
     </body>
     <script>
+    $(document).ready(function(){
        $(document).on("click", ".editasnpjt", function(){
         var pjt="",emp="";
-        console.log($(this).closest("tr").find("td:nth-child(2)").text());
         var row = $(this).closest("tr");
+        console.log(row.val());
         var project_id = $(this).attr('id');
         var getprojectId =  $(this).attr('projectID');
         var getempid = $(this).attr('employeeID');
         var project_name = row.find("td:nth-child(2)").text();
         var e_name = row.find("td:nth-child(3)").text();
-        console.log(project_name,e_name);
+        console.log(project_name,e_name,project_id);
         <cfoutput query="getpjt">     
-        pjt = pjt + '<option value="#pid#" <cfif getpjt.name EQ getpjtemp.name>selected</cfif>>#name#</option>';
+        pjt = pjt + '<option value="#pid#">#name#</option>';
        </cfoutput>
        <cfoutput query="getemp">
             emp = emp + '<option value="#eId#">#firstName#</option>';
        </cfoutput>
         $('#modal-showAlert').modal('show');
       $('#headerText').html('Edit Project');
-      $('#modal-showAlert .modal-body').html('<label>ID:</label><span style="margin-left: 25px">'+ project_id+'</span></br>'+
-          '<div class="row"><label style="margin-left:15px;">ProjectName</label><select class="form-control" id="upname" name="upname1" style="width:160px;height:30px;font-size:14px;">'+ pjt +'</select></div></br>'+
-          '<div class="row mb-1"><label style="margin-left:15px;">Employeename</label><select class="form-control" id="uename" name="uename1" style="width:160px;height:30px;font-size:14px;">'+ emp +'</select></div>');
+      $('#modal-showAlert .modal-body').html('<label>ID:</label><span style="margin-left: 25px;">'+ project_id+'</span></br>'+
+          '<div class="row"><label style="margin-left:15px;">ProjectName</label><select class="form-control" id="upname" name="upname1" style="width:160px;height:31px;font-size:12px;">'+ pjt +'</select></div></br>'+
+          '<div class="row mb-1"><label style="margin-left:15px;">Employeename</label><select class="form-control" id="uename" name="uename1" style="width:160px;height:31px;font-size:12px;">'+ emp +'</select></div>');
         $("#upname").val(getprojectId);
         $("#uename").val(getempid);
+        $(".modal-footer .update").attr('updatenew',project_id);
         $('#modal-showAlert .modal-footer .yes').hide();
         $('#modal-showAlert .modal-footer .update').show();
-        $('#modal-showAlert .modal-footer .update').click(function(){
-              console.log($('#upname option:selected').text());
+        /*$("#update1").attr('u_pid', $('#upname').val());
+        $("#update1").attr('u_eid', $('#uename').val());
+        $("#update1").attr('project_id', project_id);*/
+     $("#update1").attr('project_id', project_id);
+    });
+
+     $('#update1').click(function(){
+         alert($('#upname option:selected').text())
+            var newattr = $(this).attr('project_id');
+            console.log(newattr);
               var u_pid = $('#upname').val();
               var u_eid = $('#uename').val();
               var u_pnametext = $('#upname option:selected').text();
               var u_emptext = $('#uename option:selected').text();
+              console.log(u_pnametext,u_emptext,u_pid,u_eid);
                 $.ajax({
                 url: 'controller/projectmgnt.cfc?method=updateprojectemployee',
                 type: 'get',
                 data: {
                         pid : u_pid,
-                        peid : u_eid,
-                        eid : project_id
+                        eid : u_eid,
+                        peid : newattr
                 },
                 success: function(data){
-                   row.find("td:nth-child(1)").text(u_pnametext);
-                   row.find("td:nth-child(2)").text(u_emptext);
+                    console.log(u_pnametext,newattr);
+                    $('table').find('tr#'+newattr).find('td:eq(1)').text(u_pnametext);
+                    $('table').find('tr#'+newattr).find('td:eq(2)').text(u_emptext);
+                    $('table').find('tr#'+newattr).find('td:eq(3) button').attr('projectID', u_pid);
+                    $('table').find('tr#'+newattr).find('td:eq(3) button').attr('employeeID', u_eid);
                 }
-            })
+            });
         });
 
-    });
      $(document).on("change", ".selectpjt", function(){
           var chgid = $(this).val();
          
@@ -175,13 +189,16 @@
                         pname = res.DATA[i][4];
                         ename = res.DATA[i][5];
                         console.log(pname,ename,peid);
-                        $('tbody').append('<tr><td></td><td>' +pname+'</td><td>' +ename+'</td><td><button type="button" class="btn btn-danger btn-sm deleteasnpjt" id="'+peid+'"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
-                    '<button type="button" class="btn btn-primary btn-sm editasnpjt" style="margin-left:5px;" id="'+peid+'" projectID ='+pid+' employeeID= '+eid+'><i class="fa fa-pencil" aria-hidden="true"></i></button></td></tr>');
-                        //$('tbody').append($('#td3').html(ename));
+                        $('tbody').append('<tr><td></td><td>' +pname+'</td><td>' +ename+'</td>'+ ( chgid == 1 || chgid == 0 ? '<td><button type="button" class="btn btn-danger btn-sm deleteasnpjt" id="'+peid+'"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
+                    '<button type="button" class="btn btn-primary btn-sm editasnpjt" style="margin-left:5px;" id="'+peid+'" projectID ='+pid+' employeeID= '+eid+'><i class="fa fa-pencil" aria-hidden="true"></i></button></td>':'<td> <button type="button" class="btn btn-warning btn-sm activatepjt" id="'+peid+'"><i class="fa fa-unlock-alt" style="color:white;" aria-hidden="true"></i></button></td>')+'</tr>');
                     }
 
                 }
             })
      });
+     $(document).on("click", ".activatepjt", function(){
+
+     });
+});
     </script>
 </html>

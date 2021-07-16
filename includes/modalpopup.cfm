@@ -10,7 +10,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default btn-sm no" data-dismiss="modal"><cfoutput>Cancel</cfoutput></button>
           <button type="button" class="btn btn-success btn-sm yes" data-dismiss="modal"><cfoutput>Yes</cfoutput></button>
-          <button type="button" class="btn btn-success btn-sm update" data-dismiss="modal"><cfoutput>Update</cfoutput></button>
+          <button type="button" class="btn btn-success btn-sm update" data-dismiss="modal" id="update1"><cfoutput>Update</cfoutput></button>
         </div>
       </div>
     </div>
