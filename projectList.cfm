@@ -32,14 +32,20 @@
             }
             #table1_filter {
                 float: right;
-                margin-right: 30px;
+                margin-right: 40px;
+                width: 130px;
+            }
+            input[type="search"] {
+                border: 1px solid black;
+                width: 90%;
             }
             input {
                 width: 90% !important;
                 height: 25px !important;
             }
             #table1_info {
-                font-size: 14px;
+                font-size: 12px;
+                margin-right: 270px;
             }
             .pagination {
                 height: 25px;
@@ -48,64 +54,84 @@
              #sel {
                 font-size: 12px;
             }
+            .form-control {
+                 border: 1px solid black;
+            }
+            table {
+                border-collapse: separate !important;
+                border-spacing: 0 5px !important;
+            }
+             p {
+                font-size: 11px;
+            }
+            body {
+           font-family : "Myriad Pro Semibold", "Trebuchet MS", Arial, Helvetica, Tahoma, sans-serif;
+            }
         </style>
     </head>
     <body>
         <cfinclude template="includes/modalpopup.cfm">
+        <cfinclude template="includes/header.cfm">
         <cfset getpjt=createobject("component","controller.projectmgnt").displayproject()>
-        <div class="container">
+        <div class="container-fluid">
             <center>
-            <h5 class="mt-5">View Projects</h5>
-            <div class="col-md-10 mt-5">
-                <div class="row">
-                    <div class="col-md-1">
-                        <label>Select Projects:</label>
+                <h6 class="mt-2"><b>Projects List</b></h6>
+                <cfif #session.deptid# eq 5>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <p>Project Status:</p>
+                            </div>
+                            <div class="col-md-1">
+                                <select id="sel" name="sel1" class="form-control selectasn" style="margin-left:-30px;">
+                                    <option value="3">Select</option>
+                                    <option value="0">All</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">InActive</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <select id="sel" name="sel1" class="form-control selectasn">
-                            <option>Select</option>
-                            <option value="0">All</option>
-                            <option value="1">Active</option>
-                            <option value="2">InActive</option>
-                        </select>
-                    </div>
+                </cfif>
+                <div style="width:80%;border: 1px solid black;padding: 20px;margin: 10px;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);" class="mt-3">
+                    <table class="table table-borderless table-sm table-hover css-serial mt-5" id="table1">
+                        <thead>
+                        <tr>
+                            <!--<th>ProjectId</th>-->
+                            <th>S.No</th>
+                            <th>ProjectName</th>
+                            <th>Description</th>
+                            <th>StartDate</th>
+                            <th>EndDate</th>
+                            <cfif #session.deptid# eq 5>
+                                <th>Actions
+                                <a href="createproject.cfm"><button type="button" style="background-color:#5bc0de;color:white;" class="btn btn-sm addpjt" style="margin-left:2px;"><i class="fa fa-plus" aria-hidden="true"></i></button></a></th>
+                            </cfif>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <cfoutput query="getpjt">
+                                <tr id="#pid#" style="background-color:##F1F1F1;" class="text-dark">
+                                    <!---<td>#project_Id#</td>--->
+                                    <td>&nbsp;</td>
+                                    <td style="text-transform: capitalize;">#name#</td>
+                                    <td style="text-transform: capitalize;">#description#</td>
+                                    <td>#startdate#</td>
+                                    <td>#enddate#</td>
+                                    <cfif #session.deptid# eq 5>
+                                        <td><cfif isdefined('url.asnid') and #status# EQ 'I'>
+                                                <button type="button" style="color:##3276b1;" class="btn btn-sm activatepjt" id="#pid#" title="Activate"><i class="fa fa-unlock-alt" aria-hidden="true"></i></button>
+                                            <cfelse>
+                                                <button type="button" style="color:green;" class="btn btn-sm editpjt" id="#pid#" title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                                <button type="button" style="color:red;" class="btn btn-sm deletepjt" id="#pid#" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                            </cfif>
+                                        </td>
+                                    </cfif>
+                                </tr>
+                            </cfoutput>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-            <div style="width:80%" class="mt-3">
-            <table class="table table-bordered table-sm table-striped css-serial mt-5" id="table1">
-                <thead>
-                <tr>
-                    <!--<th>ProjectId</th>-->
-                    <th style="text-align:center;">S.No</th>
-                    <th style="text-align:center;">ProjectName</th>
-                    <th style="text-align:center;">Description</th>
-                    <th style="text-align:center;">StartDate</th>
-                    <th style="text-align:center;">EndDate</th>
-                    <th style="text-align:center;">Actions
-                    <a href="createproject.cfm"><button type="button" class="btn btn-success btn-sm addpjt" style="margin-left:2px;"><i class="fa fa-plus" aria-hidden="true"></i></button></a></th>
-                </tr>
-                </thead>
-                <tbody>
-                <cfoutput query="getpjt">
-                <tr id="#pid#">
-                    <!---<td>#project_Id#</td>--->
-                    <td>&nbsp;</td>
-                    <td style="text-transform: capitalize;">#name#</td>
-                    <td>#description#</td>
-                    <td>#startdate#</td>
-                    <td>#enddate#</td>
-                    <td><cfif isdefined('url.asnid') and #asnid# EQ 2>
-                            <button type="button" class="btn btn-warning btn-sm activatepjt" id="#pid#"><i class="fa fa-unlock-alt" style="color:white;" aria-hidden="true"></i></button>
-                        <cfelse>
-                             <button type="button" class="btn btn-primary btn-sm editpjt" id="#pid#"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                            <button type="button" class="btn btn-danger btn-sm deletepjt" id="#pid#"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                        </cfif>
-                    </td>
-                </tr>
-                </cfoutput>
-                </tbody>
-            </table>
-            </div>
             </center>
         </div>
         <script>
@@ -128,7 +154,7 @@
                console.log($(this).attr('id'));
                var newid = $(this).attr('id');
                $('#modal-showAlert').modal('show');
-               $('#headerText').html('Close Project');
+               $('#headerText').html('Activate Project');
                $('#modal-showAlert .modal-body').html('Are you sure you want to activate this project?');
                $('#modal-showAlert .modal-footer .update').hide();
                $('#modal-showAlert .modal-footer .yes').show();

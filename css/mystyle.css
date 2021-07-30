@@ -14,7 +14,6 @@ label {
     font-size: 12px;
     font-weight: bold;
     display: inline-block;
-    width: 100px;
 }
 .labelmiddle * {
     vertical-align: top;
@@ -33,11 +32,11 @@ input[type=text], input[type=date], select {
     font-size: 14px;
 }
 .card {
-    width: 770px;
+    width: 800px;
     margin-left: 180px;
     background-color: #EFEFEF;
 }
-#div1, #div2, #div3 {
+#div1, #div2, #div3, #div4 {
     font-size: 14px;
     height: 10px;
 }
@@ -45,7 +44,7 @@ th {
     font-size: 14px;
 }
 td {
-    font-size: 12px;
+    font-size: 13px;
 }
 .modal-body{
     font-size: 14px;

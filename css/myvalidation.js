@@ -1,6 +1,5 @@
 $(document).ready(function(){
-   
-    $("#pname").keypress(function(e){
+   $("#pname").keypress(function(e){
         var key=e.keyCode;
         console.log(key)
         if((key >= 32 && key <= 64) || (key >= 91 && key <= 95) || (key >= 123 && key >= 125)){  
@@ -14,7 +13,7 @@ $(document).ready(function(){
                 //$('#pname').css({border:'1px solid black'});
                 $("#div1").text("");
                 return false;
-              } 
+            } 
         }
     });
 
@@ -51,37 +50,40 @@ $(document).ready(function(){
             //$('#pname').css({border:'1px solid black'});
             $("#div1").text("");
             return false;
-          } 
-          //if($("#div2").css("display") == "block"){
-            if($("#div2").text() != ""){
+        } 
+        //if($("#div2").css("display") == "block"){
+        if($("#div2").text() != ""){
             //$("#div2").css("display", "none");
             //$('#desc').css({border:'1px solid black'});
             $("#div2").text("");
             return false;
-          }
-          if($("#div3").text() != ""){
+        }
+        if($("#div3").text() != ""){
             //$("#div3").css("display", "none");
             //$('#sdate').css({border:'1px solid black'});
             $('#div3').text("");
             return false;
-          }  
+        }  
     });
     $(".savebtn").click(function () {
         var pname = $("#spname").val();
         var ename = $("#sename").val();
-        console.log(pname);
-        if(pname == "" || pname == null){
+        if(pname == "" || pname == null || pname == 0){
             $("#div1").text("Select projectname");
             $('#div1').css({color:'red',visibility:'visible',fontsize:12});
             return false;
+        }else {
+            $("#div1").text("");
         }
         if(ename == "" || ename == 0){
             $("#div2").text("Select employeename");
             $('#div2').css({color:'red',visibility:'visible',fontsize:12});
             return false;
-    }
+        }else {
+            $("#div2").text("");
+        }
     });
-    $(".default").click(function (){
+    $(".s1").click(function (){
         console.log("hi")
         if($("#div1").css("visibility") == "visible"){
             $("#div1").css("visibility","hidden");
