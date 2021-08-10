@@ -221,4 +221,23 @@
             WHERE projectId = <cfqueryparam value="#arguments.pid#" cfsqltype="integer">
         </cfquery>
     </cffunction>
+    <cffunction name="getreport" access="remote" returnFormat="json">
+        <cfargument name="pid" required="true">
+        <cfargument name="eid" required="true">
+        <cfdump var="#arguments.eid#">
+        <cfset result = []>
+        <cfloop list="#arguments.pid#" index="local.item">
+            <cfquery name="report" datasource="projectmanagement">
+                SELECT project.dbo.projectemployee.peid,project.dbo.projectemployee.projectId,project.dbo.projectemployee.employeeId,
+                project.dbo.projectemployee.status,project.dbo.project.name,employee.dbo.employee.firstName,project.dbo.projectemployee.allocation
+                FROM project.dbo.projectemployee 
+                INNER JOIN project.dbo.project ON project.dbo.project.pid = project.dbo.projectemployee.projectId
+                INNER JOIN employee.dbo.employee ON employee.dbo.employee.eId = project.dbo.projectemployee.employeeId
+                WHERE (project.dbo.projectemployee.employeeId = <cfqueryparam value="#arguments.eid#" cfsqltype="integer"> or 
+                project.dbo.projectemployee.projectId = <cfqueryparam value = "#local.item#" cfsqltype="integer">) 
+                AND project.dbo.projectemployee.status='A';
+            </cfquery>
+        </cfloop>
+        <cfreturn report>
+    </cffunction>
 </cfcomponent>
